@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "chasm"
+version = "0.0.1"
+description = "Chart Assembler - A tool for creating charts from data"
+authors = ["Travis Lazar"]
+readme = "README.md"
+packages = [{include = "chasm"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+click = "^8.0.0"
+kaleido = ">=1.0.0"
+pyyaml = ">=6.0.2"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.0.0"
+
+[tool.poetry.scripts]
+chasm = "chasm.cli:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
