@@ -7,8 +7,8 @@ from chasm.library.layer import get_chart_config
 from chasm.library.config import ChartConfig
 
 
-def make_chart(chart_type: str, raw_data: Any, layer_paths: List[str], output_folder: str) -> go.Figure:
-    data = parse_data_input(raw_data)
+def make_chart(chart_type: str, raw_data: Any, layer_paths: List[str], mod_paths: List[str], output_folder: str) -> go.Figure:
+    data = parse_data_input(raw_data, mod_paths)
     config = get_chart_config(layers=layer_paths)
 
     if chart_type == "bar":
