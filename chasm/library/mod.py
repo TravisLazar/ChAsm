@@ -69,6 +69,12 @@ class ListAppendRandInt(Instruction):
         return data
 
 
+ISA = {
+    ("list", "appendrandint"): ListAppendRandInt,
+    ("item", "addint"): ItemAddInt,
+}
+
+
 @dataclass
 class Mod:
     path: str
@@ -89,13 +95,8 @@ class Mod:
 
                 assert(len(split_line) == 3)
 
-                if split_line[0] == "list":
-                    if split_line[1] == "appendrandint":
-                        self.instructions.append(ListAppendRandInt(line=split_line[2]))
-
-                elif split_line[0] == "item":
-                    if split_line[1] == "addint":
-                        self.instructions.append(ItemAddInt(line=split_line[2]))
+                instruction = ISA.get((split_line[0], split_line[1]), Instruction("NOOP"))(split_line[2])
+                self.instructions.append(instruction)
 
     def process(self, data: List[Dict]) -> List[Dict]:
         for instruction in self.instructions:
