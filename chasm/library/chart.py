@@ -20,20 +20,37 @@ def make_bar(data: List[dict], config: ChartConfig, output_folder: str) -> go.Fi
     ys = [d[config.data_ykey] for d in data]
 
     trace = go.Bar(x=xs, y=ys)
+    # marker=dict(color='red')
+    # line=dict(color='blue', width=2)
     fig = go.Figure(trace)
 
     fig.update_layout(
         title=config.chart_title,
+        paper_bgcolor=config.chart_paper_bgcolor,
+        plot_bgcolor=config.chart_plot_bgcolor,
+        # colorway=['#FFA15A', '#00CC96', '#636EFA'],
+        margin=dict(
+            l=config.chart_margin_l,
+            r=config.chart_margin_r,
+            t=config.chart_margin_t,
+            b=config.chart_margin_b
+        )
     )
 
     fig.update_xaxes(
         title=config.chart_xaxis_title,
-        visible=config.chart_xaxis_visible
+        visible=config.chart_xaxis_visible,
+        showticklabels=config.chart_xaxis_showticklabels,
+        showgrid=config.chart_xaxis_showgrid,
+        zeroline=config.chart_xaxis_zeroline
     )
 
     fig.update_yaxes(
         title=config.chart_yaxis_title,
-        visible=config.chart_yaxis_visible
+        visible=config.chart_yaxis_visible,
+        showticklabels=config.chart_yaxis_showticklabels,
+        showgrid=config.chart_yaxis_showgrid,
+        zeroline=config.chart_yaxis_zeroline
     )
     
     # TODO: Move out of this function
