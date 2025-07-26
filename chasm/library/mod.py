@@ -70,8 +70,9 @@ class ListAppendRandInt(Instruction):
 
 
 ISA = {
-    ("list", "appendrandint"): ListAppendRandInt,
-    ("item", "addint"): ItemAddInt,
+    ("list", "appendrandint"):      ListAppendRandInt,
+    ("item", "addint"):             ItemAddInt,
+    # item addfromoffset (add value in y to value in y from index - 1 and store in y1)
 }
 
 

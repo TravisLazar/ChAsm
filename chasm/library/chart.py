@@ -19,16 +19,19 @@ def make_bar(data: List[dict], config: ChartConfig, output_folder: str) -> go.Fi
     xs = [d[config.data_xkey] for d in data]
     ys = [d[config.data_ykey] for d in data]
 
-    trace = go.Bar(x=xs, y=ys)
-    # marker=dict(color='red')
-    # line=dict(color='blue', width=2)
+    trace = go.Bar(
+        x=xs, 
+        y=ys,
+        marker_line_width=config.marker_line_width
+    )
+    
     fig = go.Figure(trace)
 
     fig.update_layout(
         title=config.chart_title,
         paper_bgcolor=config.chart_paper_bgcolor,
         plot_bgcolor=config.chart_plot_bgcolor,
-        # colorway=['#FFA15A', '#00CC96', '#636EFA'],
+        colorway=config.chart_colorway,
         margin=dict(
             l=config.chart_margin_l,
             r=config.chart_margin_r,
