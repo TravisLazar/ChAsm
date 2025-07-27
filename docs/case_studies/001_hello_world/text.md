@@ -21,7 +21,7 @@ A couple things to notice.
 
 The `--data` argument must always evaluate to a list of dictionaries. This is non-negotiable in ChAsm, and many of the features included in this library depend on this base assumption that the root data structure is a list of dictionaries. 
 
-```json
+```
 # Simplest Data Form
 
 [
@@ -99,7 +99,7 @@ Here's an example command and dataset (provided in the examples folder of this p
 chasm make bar --data "$(cat examples/data/simple_multibar.data.json)" -o ./docs/case_studies/001_hello_world/chart2.svg
 ```
 
-```json
+```
 # simple_multibar.data.json
 [
     {
