@@ -56,21 +56,65 @@ class ListAppendRandInt(Instruction):
     def __post_init__(self):
         super().__post_init__()
 
-        assert(len(self.split_line) == 3)
+        assert(len(self.split_line) >= 3 or len(self.split_line) <= 6)
 
         self.num_values = int(self.split_line[0])
         self.lower = int(self.split_line[1])
         self.upper = int(self.split_line[2])
 
+        self.x_key = "x0"
+        self.y_key = "y0"
+
+        self.x_prefix = "Value"
+
+        if len(self.split_line) > 3:
+            self.x_key = str(self.split_line[3])
+
+        if len(self.split_line) > 4:
+            self.y_key = str(self.split_line[4])
+
+        if len(self.split_line) > 5:
+            self.x_prefix = str(self.split_line[5])
+
     def process(self, data: List[Dict]):
         for i in range(0, self.upper):
-            data.append({"x": f"Value {i + 1}", "y": random.randint(self.lower, self.upper)})
+            data.append({self.x_key: f"{self.x_prefix} {i + 1}", self.y_key: random.randint(self.lower, self.upper)})
+            
+        return data
+
+
+@dataclass
+class ListInjectRandInt(Instruction):
+    """
+    Inject a random integer into each item in the data set
+
+    type:           list
+    instruction:    injectrandint
+
+    params:     
+        num         <int> Number of values to append
+        lower       <int> Lower bound (inclusive) for random number generation
+        upper       <int> Upper bound (inclusive) for random number generation
+    """
+    def __post_init__(self):
+        super().__post_init__()
+
+        assert(len(self.split_line) == 3)
+
+        self.lower = int(self.split_line[0])
+        self.upper = int(self.split_line[1])
+        self.y_key = str(self.split_line[2])
+
+    def process(self, data: List[Dict]):
+        for datum in data:
+            datum[self.y_key] = random.randint(self.lower, self.upper)
             
         return data
 
 
 ISA = {
     ("list", "appendrandint"):      ListAppendRandInt,
+    ("list", "injectrandint"):      ListInjectRandInt,
     ("item", "addint"):             ItemAddInt,
     # item addfromoffset (add value in y to value in y from index - 1 and store in y1)
 }

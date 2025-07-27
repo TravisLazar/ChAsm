@@ -12,11 +12,13 @@ def get_layer_obj(path) -> dict:
         print(f"Error parsing YAML: {exc}")
 
 
-def get_chart_config(layers) -> ChartConfig:
+def get_chart_config(data, layers) -> ChartConfig:
     config = ChartConfig()
 
     for layer in layers:
         obj = get_layer_obj(layer)
         config.apply_layer(obj)
+
+    config.compute_keys(data[0])
 
     return config

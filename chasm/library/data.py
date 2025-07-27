@@ -1,5 +1,6 @@
 import os, json
 from typing import Any, List, Dict
+from dataclasses import dataclass
 from chasm.library.mod import Mod, get_mods
 
 

@@ -1,11 +1,14 @@
-from typing import List
+import re
+from typing import List, Dict
 from dataclasses import dataclass, field
 
 
 @dataclass
 class ChartConfig:
     data_xkey: str =                    "x"
-    data_ykey: str =                    "y"
+
+    data_ykey_match: str =              r"^y\d*$"
+    data_ykeys: List[str] =             None # If None, computed at runtime from ykey_match
 
     chart_title: str =                  "Hello Bar Chart"
 
@@ -40,7 +43,14 @@ class ChartConfig:
 
     marker_line_width: int =            0
 
-    def apply_layer(self, obj: dict) -> None:
+    def apply_layer(self, obj: Dict) -> None:
         for key, value in obj.items():
             if hasattr(self, key):
                 setattr(self, key, value)
+
+    def _compute_keys_from_match(self, data_sample: Dict, matcher: str) -> List[str]:
+        return [key for key in data_sample.keys() if re.fullmatch(matcher, key)]
+
+    def compute_keys(self, data_sample):
+        if not self.data_ykeys:
+            self.data_ykeys = self._compute_keys_from_match(data_sample, self.data_ykey_match)

@@ -7,25 +7,16 @@ from chasm.library.layer import get_chart_config
 from chasm.library.config import ChartConfig
 
 
-def make_chart(chart_type: str, raw_data: Any, layer_paths: List[str], mod_paths: List[str], output_folder: str) -> go.Figure:
+def make_chart(chart_type: str, raw_data: Any, layer_paths: List[str], mod_paths: List[str], output_path: str) -> go.Figure:
     data = parse_data_input(raw_data, mod_paths)
-    config = get_chart_config(layers=layer_paths)
+    config = get_chart_config(data=data, layers=layer_paths)
 
     if chart_type == "bar":
-        return make_bar(data, config, output_folder)
+        return make_bar(data, config, output_path)
 
 
-def make_bar(data: List[dict], config: ChartConfig, output_folder: str) -> go.Figure:
-    xs = [d[config.data_xkey] for d in data]
-    ys = [d[config.data_ykey] for d in data]
-
-    trace = go.Bar(
-        x=xs, 
-        y=ys,
-        marker_line_width=config.marker_line_width
-    )
-    
-    fig = go.Figure(trace)
+def make_figure(config: ChartConfig) -> go.Figure:
+    fig = go.Figure()
 
     fig.update_layout(
         title=config.chart_title,
@@ -55,8 +46,31 @@ def make_bar(data: List[dict], config: ChartConfig, output_folder: str) -> go.Fi
         showgrid=config.chart_yaxis_showgrid,
         zeroline=config.chart_yaxis_zeroline
     )
+
+    return fig
+
+
+def make_bar(data: List[dict], config: ChartConfig, output_path: str) -> go.Figure:
+    fig = make_figure(config)
+
+    traces = []
+    for y_key in config.data_ykeys:
+        x_key = config.data_xkey
+
+        xs = [d[x_key] for d in data]
+        ys = [d[y_key] for d in data]
+
+        trace = go.Bar(
+            x=xs, 
+            y=ys,
+            marker_line_width=config.marker_line_width
+        )
+
+        traces.append(trace)
+
+    fig.add_traces(traces)
     
     # TODO: Move out of this function
-    fig.write_image(f"{output_folder}/hello_world.svg")
+    fig.write_image(f"{output_path}")
 
     return fig
