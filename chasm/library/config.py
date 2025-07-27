@@ -16,6 +16,12 @@ class ChartConfig:
     chart_layout_showlegend: bool =     False
 
     chart_title_text: str =             None
+    chart_title_font_weight: int =      650
+    chart_title_font_size: int =        20
+    chart_title_pad_l: int =            8
+    chart_title_pad_r: int =            8
+    chart_title_pad_t: int =            8
+    chart_title_pad_b: int =            8
     chart_title_automargin: bool =      True
 
     chart_margin_l: int =               35

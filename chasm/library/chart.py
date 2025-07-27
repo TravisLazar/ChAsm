@@ -24,6 +24,14 @@ def make_figure(config: ChartConfig) -> go.Figure:
 
     fig.update_layout(
         title_text=config.chart_title_text,
+        title_font_weight=config.chart_title_font_weight,
+        title_font_size=config.chart_title_font_size,
+        title_pad=dict(
+            l=config.chart_title_pad_l,
+            r=config.chart_title_pad_r,
+            t=config.chart_title_pad_t,
+            b=config.chart_title_pad_b
+        ),
         title_automargin=config.chart_title_automargin,
         paper_bgcolor=config.chart_paper_bgcolor,
         plot_bgcolor=config.chart_plot_bgcolor,

@@ -1,15 +1,27 @@
 import yaml
+import os
 from chasm.library.config import ChartConfig
 
 def get_layer_obj(path) -> dict:
-    try:
-        with open(path, 'r') as file:
-            data = yaml.safe_load(file)
+    # Check if the input string provided points at a valid path
+    if os.path.isfile(path):
+        try:
+            with open(path, 'r') as file:
+                data = yaml.safe_load(file)
+                return data
+
+        except FileNotFoundError:
+            print(f"Error: The file '{path}' was not found.")
+        except yaml.YAMLError as exc:
+            print(f"Error parsing YAML: {exc}")
+
+    else:
+        try:
+            data = yaml.safe_load(path)
             return data
-    except FileNotFoundError:
-        print(f"Error: The file '{path}' was not found.")
-    except yaml.YAMLError as exc:
-        print(f"Error parsing YAML: {exc}")
+
+        except yaml.YAMLError as exc:
+            print(f"Error parsing YAML: {exc}")
 
 
 def get_chart_config(data, layers) -> ChartConfig:

@@ -7,6 +7,7 @@ ChartAssembler is (hopefully) a powerful and intuitive charting library that sim
 As of right now, this project is not published to any package managers. To use it: clone it, create a venv, run poetry install, and then use one of the listed Use Cases to learn the basics. As this project matures, this section will be expanded to include more detailed installation instructions.
 
 * [Case Study #1: Hello World](./docs/case_studies/001_hello_world/text.md)
+* [Case Study #2: Basic Layering](./docs/case_studies/002_basic_layers/text.md)
 
 ## Filing Issues
 
