@@ -126,4 +126,4 @@ chasm make stackedbar --data "$(cat examples/data/simple_multibar.data.json)" -o
 
 All of these core concepts brings together the basics of ChAsm. Everything is built upon this basic foundation of sane defaults, expanded and modified. However, the _real_ power begins when we start layering data modifiers and chart config layers. 
 
-Next, see: [Case Study #2: Basic Layering](./docs/case_studies/002_basic_layers/text.md)
+Next, see: [Case Study #2: Basic Layering](../002_basic_layers/text.md)
