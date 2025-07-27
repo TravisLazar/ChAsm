@@ -1,14 +1,14 @@
 [
     {
-        "x": "cat1",
+        "x": "Category 1",
         "y": 4
     },
     {
-        "x": "cat2",
+        "x": "Category 2",
         "y": 7
     },
     {
-        "x": "cat3",
+        "x": "Category 3",
         "y": 5
     }
 ]

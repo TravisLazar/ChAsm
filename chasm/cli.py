@@ -22,12 +22,13 @@ def info():
 
 
 @main.command()
+@click.argument('chart_type', type=click.Choice(['bar', 'stackedbar']))
 @click.option('--data', '-d', help='raw data, as a list of dicts')
 @click.option('--layer', '-l', multiple=True, help='list of paths to layer files, processed in order')
 @click.option('--mod', '-m', multiple=True, help='list of paths to manipulator files, processed in order')
 @click.option('--output-path', '-o', default='build/chart.svg', help='path to output graphic')
-def bar(data: str, layer: List[str], mod: List[str], output_path: str):
-    make_chart("bar", raw_data=data, layer_paths=layer, mod_paths=mod, output_path=output_path)
+def make(chart_type: str, data: str, layer: List[str], mod: List[str], output_path: str):
+    make_chart(chart_type, raw_data=data, layer_paths=layer, mod_paths=mod, output_path=output_path)
 
 
 if __name__ == "__main__":

@@ -10,16 +10,22 @@ class ChartConfig:
     data_ykey_match: str =              r"^y\d*$"
     data_ykeys: List[str] =             None # If None, computed at runtime from ykey_match
 
-    chart_title: str =                  "Hello Bar Chart"
+    data_ykey_name_lookup: Dict[str, str] = field(default_factory=dict)
 
-    chart_margin_l: int =               None
-    chart_margin_r: int =               None
-    chart_margin_t: int =               None
-    chart_margin_b: int =               None
+    chart_layout_barmode: str =         "group"
+    chart_layout_showlegend: bool =     False
+
+    chart_title_text: str =             None
+    chart_title_automargin: bool =      True
+
+    chart_margin_l: int =               35
+    chart_margin_r: int =               15
+    chart_margin_t: int =               15
+    chart_margin_b: int =               35
     chart_automargin: bool =            True
 
-    chart_paper_bgcolor: str =          '#ffffff'
-    chart_plot_bgcolor: str =           '#ffffff'
+    chart_paper_bgcolor: str =          "#ffffff"
+    chart_plot_bgcolor: str =           "#ffffff"
     chart_colorway: List[str] =         field(
                                             default_factory=lambda: [
                                                 "#1d95dd",
@@ -29,17 +35,23 @@ class ChartConfig:
                                             ]
                                         )
 
-    chart_xaxis_title: str =            "x-Title"
+    chart_xaxis_title: str =            None
     chart_xaxis_visible: bool =         True
     chart_xaxis_showticklabels: bool =  True
-    chart_xaxis_showgrid: bool =        True
+    chart_xaxis_showgrid: bool =        False
     chart_xaxis_zeroline: bool =        True
+    chart_xaxis_automargin: bool =      True
+    chart_xaxis_gridcolor: str =        "#d3dbdc"
+    chart_xaxis_ticklabelstandoff: int = 7
 
-    chart_yaxis_title: str =            "y-Title"
+    chart_yaxis_title: str =            None
     chart_yaxis_visible: bool =         True
     chart_yaxis_showticklabels: bool =  True
     chart_yaxis_showgrid: bool =        True
     chart_yaxis_zeroline: bool =        True
+    chart_yaxis_automargin: bool =      True
+    chart_yaxis_gridcolor: str =        "#d3dbdc"
+    chart_yaxis_ticklabelstandoff: int = 7
 
     marker_line_width: int =            0
 
