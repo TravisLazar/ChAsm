@@ -80,4 +80,6 @@ list        injectrandint      0, 50, y1
 
 ![chart3](chart3.svg)
 
+The `injectrandint` instruction will add a new key:value pair into every item, where the key is passed by the user as an argument, and the value is a random number between `upper` and `lower`. 
+
 See the [Complete Listing of ChAsm ISA Instructions](../../isa/list.md).

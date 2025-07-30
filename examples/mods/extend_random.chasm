@@ -4,3 +4,5 @@ list        appendrandint      10, 0, 100, x, y
 # For each item add 5 to y entry
 item        addint             105, y
 
+# Add a random integer at y1 in each item of the data array
+item        injectrandint      0, 50, y1

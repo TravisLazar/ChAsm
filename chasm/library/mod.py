@@ -86,7 +86,7 @@ class ListAppendRandInt(Instruction):
 
 
 @dataclass
-class ListInjectRandInt(Instruction):
+class ItemInjectRandInt(Instruction):
     """
     Inject a random integer into each item in the data set
 
@@ -116,7 +116,7 @@ class ListInjectRandInt(Instruction):
 
 ISA = {
     ("list", "appendrandint"):      ListAppendRandInt,
-    ("list", "injectrandint"):      ListInjectRandInt,
+    ("item", "injectrandint"):      ItemInjectRandInt,
     ("item", "addint"):             ItemAddInt,
     # item addfromoffset (add value in y to value in y from index - 1 and store in y1)
 }
