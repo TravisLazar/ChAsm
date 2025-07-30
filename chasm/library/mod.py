@@ -39,6 +39,8 @@ class ItemAddInt(Instruction):
         for datum in data:
             datum[self.key] = datum[self.key] + self.adder
 
+        return data
+
 
 @dataclass
 class ListAppendRandInt(Instruction):
@@ -77,7 +79,7 @@ class ListAppendRandInt(Instruction):
             self.x_prefix = str(self.split_line[5])
 
     def process(self, data: List[Dict]):
-        for i in range(0, self.upper):
+        for i in range(0, self.num_values):
             data.append({self.x_key: f"{self.x_prefix} {i + 1}", self.y_key: random.randint(self.lower, self.upper)})
             
         return data

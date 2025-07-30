@@ -116,4 +116,4 @@ This combination of ordering, options, and raw text allows for each user to buil
 
 And while this is starting to look pretty cool, the data modification features are the final level of ChAsm's flexibility. 
 
-_**#TODO:** Add link to data modification case study here_
+Next, see: [Case Study #3: Basic Data Modifications](../003_data_mods/text.md)
