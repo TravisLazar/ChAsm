@@ -1,8 +1,9 @@
 # For the entire list append 10 random values From 0 to 100 (inclusive)
-list        appendrandint      10, 0, 100, x, y
+list        appendrandint      100, 0, 100, x, y
 
 # For each item add 5 to y entry
 item        addint             105, y
 
 # Add a random integer at y1 in each item of the data array
 item        injectrandint      0, 50, y1
+item        injectrandint      0, 50, s1

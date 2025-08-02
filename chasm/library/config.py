@@ -12,6 +12,11 @@ class ChartConfig:
 
     data_ykey_name_lookup: Dict[str, str] = field(default_factory=dict)
 
+    data_skey_match: str =              r"^s\d*$"
+    data_skeys: List[str] =             None
+
+    data_skey_name_lookup: Dict[str, str] = field(default_factory=dict)
+
     chart_layout_barmode: str =         "group"
     chart_layout_showlegend: bool =     False
 
@@ -72,3 +77,6 @@ class ChartConfig:
     def compute_keys(self, data_sample):
         if not self.data_ykeys:
             self.data_ykeys = self._compute_keys_from_match(data_sample, self.data_ykey_match)
+
+        if not self.data_skeys:
+            self.data_skeys = self._compute_keys_from_match(data_sample, self.data_skey_match)

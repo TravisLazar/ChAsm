@@ -1,4 +1,5 @@
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 from typing import Any, List
 
@@ -20,7 +21,8 @@ def make_chart(chart_type: str, raw_data: Any, layer_paths: List[str], mod_paths
 
 
 def make_figure(config: ChartConfig) -> go.Figure:
-    fig = go.Figure()
+    # fig = go.Figure()
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
 
     fig.update_layout(
         title_text=config.chart_title_text,
@@ -74,24 +76,32 @@ def make_figure(config: ChartConfig) -> go.Figure:
 def make_bar(data: List[dict], config: ChartConfig, output_path: str) -> go.Figure:
     fig = make_figure(config)
 
-    traces = []
-    for idx, y_key in enumerate(config.data_ykeys):
+    for idx, y_key in enumerate(config.data_ykeys + config.data_skeys):
         x_key = config.data_xkey
 
         x_data = [d[x_key] for d in data]
         y_data = [d[y_key] for d in data]
 
-        trace = go.Bar(
-            x=x_data, 
-            y=y_data,
-            marker_line_width=config.marker_line_width,
-            name=config.data_ykey_name_lookup.get(y_key, f"Series {y_key}")
-        )
+        if y_key in config.data_ykeys:
+            trace = go.Bar(
+                x=x_data, 
+                y=y_data,
+                marker_line_width=config.marker_line_width,
+                name=config.data_ykey_name_lookup.get(y_key, f"Series {y_key}")
+            )
 
-        traces.append(trace)
+            fig.add_trace(trace, secondary_y=False)
 
-    fig.add_traces(traces)
-    
+        elif y_key in config.data_skeys:
+            trace = go.Scatter(
+                x=x_data, 
+                y=y_data,
+                marker_line_width=config.marker_line_width,
+                name=config.data_ykey_name_lookup.get(y_key, f"Series {y_key}")
+            )
+
+            fig.add_trace(trace, secondary_y=True)
+
     # TODO: Move out of this function
     fig.write_image(f"{output_path}")
 
