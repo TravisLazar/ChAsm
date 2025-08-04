@@ -12,16 +12,14 @@ def make_chart(chart_type: str, raw_data: Any, layer_paths: List[str], mod_paths
     data = parse_data_input(raw_data, mod_paths)
     config = get_chart_config(data=data, layers=layer_paths)
 
-    if chart_type == "bar":
-        return make_bar(data, config, output_path)
     if chart_type == "stackedbar":
         config.chart_layout_barmode = "stack"
 
+    if chart_type in ("bar", "stackedbar"):
         return make_bar(data, config, output_path)
 
 
 def make_figure(config: ChartConfig) -> go.Figure:
-    # fig = go.Figure()
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
     fig.update_layout(
