@@ -1,0 +1,4 @@
+appendrandint num=100, low=0, high=100, xkey=x, ykey=y1
+injectrandint low=0, high=50, ykey=s1
+injectrandint low=0, high=50, ykey=y2
+addint adder=1000, key=y1

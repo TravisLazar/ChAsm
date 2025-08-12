@@ -1,6 +1,6 @@
 import random
 from typing import List, Dict
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from dataclasses import dataclass, field
 
 
@@ -11,32 +11,37 @@ class Instruction:
     class InstructionArguments(BaseModel):
         pass
 
-    def _typecheck(self):
-        return self.InstructionArguments(**self.args)
-
     def __post_init__(self):
-        self.parsed_args = self._typecheck()
+        self.parsed_args = self.InstructionArguments(**self.args)
 
     def process(self, data: List[Dict]) -> List[Dict]:
         return data
 
 
 @dataclass
-class ItemAddInt(Instruction):
+class AddInt(Instruction):
     """
     For every item in the list of data, add a specified integer value
     """
+    class InstructionArguments(BaseModel):
+        adder: int = Field(
+            ...,
+            description="Value to add at specified key of each element",
+            examples="100, 155, 304, 455, ..."
+        )
+
+        key: str = Field(
+            ...,
+            description="The key of each data element to add {adder} into",
+            examples="y, y1, y2, x1, s1, s2, ..."
+        )
+
     def __post_init__(self):
         super().__post_init__()
 
-        assert(len(self.split_line) == 2)
-
-        self.adder = int(self.split_line[0])
-        self.key = str(self.split_line[1])
-
     def process(self, data: List[Dict]):
         for datum in data:
-            datum[self.key] = datum[self.key] + self.adder
+            datum[self.parsed_args.key] = datum[self.parsed_args.key] + self.parsed_args.adder
 
         return data
 
@@ -47,56 +52,95 @@ class AppendRandInt(Instruction):
     Append a series of random integers to the end of the data set
     """
     class InstructionArguments(BaseModel):
-        num: int
-        low: int
-        high: int
-        xkey: str = "x0"
-        ykey: str = "y0"
-        xprefix: str = "Value"
+        num: int = Field(
+            ...,
+            description="Number of entries to append to the data list.",
+            examples="10, 15, 30, 50, 100, ..."
+        )
+
+        low: int = Field(
+            ...,
+            description="The minimum value that can be randomly generated",
+            examples="0, 100, 1000, 1553, ..."
+        )
+
+        high: int = Field(
+            ...,
+            description="The maximum value that can be randomly generated",
+            examples="1000, 2304, 10, 55, ..."
+        )
+
+        xkey: str = Field(
+            default = "x0",
+            description="The category (x) key to use when writing new random values. The value written here will increment from 1 to N.",
+            examples="x0, x1, cat, date, ..."
+        )
+
+        ykey: str = Field(
+            default = "y0",
+            description="The value (y) key to use when writing new random values. This will be the key at which the integer value is written.",
+            examples="y, y1, num, count, ..."
+        )
+
+        xprefix: str = Field(
+            default = "Value",
+            description="The prefix to use when writing to the {xkey} field. Will be used as a prefix for every incrementing 1-based value.",
+            examples="Value, Category, Entry, ..."
+        )
 
     def __post_init__(self):
         super().__post_init__()
 
     def process(self, data: List[Dict]):
         for i in range(0, self.parsed_args.num):
-            data.append({self.parsed_args.xkey: f"{self.parsed_args.xprefix} {i + 1}", self.parsed_args.ykey: random.randint(self.parsed_args.low, self.parsed_args.high)})
+            data.append(
+                {
+                    self.parsed_args.xkey: f"{self.parsed_args.xprefix} {i + 1}", 
+                    self.parsed_args.ykey: random.randint(self.parsed_args.low, self.parsed_args.high)
+                }
+            )
             
         return data
 
 
 @dataclass
-class ItemInjectRandInt(Instruction):
+class InjectRandInt(Instruction):
     """
     Inject a random integer into each item in the data set
-
-    type:           list
-    instruction:    injectrandint
-
-    params:     
-        num         <int> Number of values to append
-        lower       <int> Lower bound (inclusive) for random number generation
-        upper       <int> Upper bound (inclusive) for random number generation
     """
+    class InstructionArguments(BaseModel):
+        low: int = Field(
+            ...,
+            description="The minimum value that can be randomly generated",
+            examples="0, 100, 1000, 1553, ..."
+        )
+
+        high: int = Field(
+            ...,
+            description="The maximum value that can be randomly generated",
+            examples="1000, 2304, 10, 55, ..."
+        )
+
+        ykey: str = Field(
+            ...,
+            description="The value (y) key to use when writing new random values. This will be the key at which the integer value is written.",
+            examples="y, y1, num, count, ..."
+        )
+
     def __post_init__(self):
         super().__post_init__()
 
-        assert(len(self.split_line) == 3)
-
-        self.lower = int(self.split_line[0])
-        self.upper = int(self.split_line[1])
-        self.y_key = str(self.split_line[2])
-
     def process(self, data: List[Dict]):
         for datum in data:
-            datum[self.y_key] = random.randint(self.lower, self.upper)
-            
+            datum[self.parsed_args.ykey] = random.randint(self.parsed_args.low, self.parsed_args.high)
+        
         return data
 
 
 ISA = {
     "appendrandint":        AppendRandInt,
-    "injectrandint":        ItemInjectRandInt,
-    "addint":               ItemAddInt,
+    "injectrandint":        InjectRandInt,
+    "addint":               AddInt,
 }
 
 
@@ -148,13 +192,8 @@ class Mod:
                 elif not stripped_line:
                     continue
                 
-                # TODO: This is so error prone it's crazy, come back and add good sanitization
                 inst_name, inst_arg_str = stripped_line.split(None, 1)
                 inst_args = self._parse_args(inst_arg_str)
-
-                # Validate with pydantic and pass model to instruction???
-
-                # assert(len(split_line) == 2)
 
                 instruction = ISA.get(inst_name, Instruction({}))(inst_args)
                 self.instructions.append(instruction)

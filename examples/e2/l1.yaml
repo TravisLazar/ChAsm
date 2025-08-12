@@ -1,0 +1,26 @@
+# Chart Settings
+chart_title: null
+chart_margin_l: 10
+chart_margin_r: 10
+chart_margin_t: 10
+chart_margin_b: 10
+
+chart_layout_showlegend: false
+
+# X-Axis Settings
+chart_xaxis_title: null
+chart_xaxis_visible: false
+
+# Y-Axis Settings
+chart_yaxis_title: null
+chart_yaxis_visible: false
+
+chart_colorway:
+  - "#f72585"
+  - "#7209b7"
+  - "#3a0ca3"
+  - "#4361ee"
+  - "#4cc9f0"
+
+
+

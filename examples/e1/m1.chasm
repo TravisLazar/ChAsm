@@ -1,0 +1,12 @@
+# For the entire list append 10 random values From 0 to 100 (inclusive)
+appendrandint num=100, low=0, high=100, xkey=x, ykey=y
+#list        appendrandint      100, 0, 100, x, y
+
+# For each item add 5 to y entry
+#item        addint             105, y
+#addint num=105, key=y
+
+# Add a random integer at y1 in each item of the data array
+#injectrandint low=0, high=50, key=y1
+#item        injectrandint      0, 50, y1
+#item        injectrandint      90, 100, s1
