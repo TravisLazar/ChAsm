@@ -31,6 +31,8 @@ def get_chart_config(data, layers) -> ChartConfig:
         obj = get_layer_obj(layer)
         config.apply_layer(obj)
 
+    # TODO: Should this go into the apply_layer function? It will reduce performance
+    # but all reduce the chance that this gets missed in other future logic.
     config.compute_keys(data[0])
 
     return config

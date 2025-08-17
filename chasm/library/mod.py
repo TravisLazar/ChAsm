@@ -19,6 +19,34 @@ class Instruction:
 
 
 @dataclass
+class InjectMovingAverage(Instruction):
+    """
+    For every item in the list of data, add a specified integer value
+    """
+    class InstructionArguments(BaseModel):
+        num: int = Field(
+            ...,
+            description="The number of data elements to calculate the moving average of.",
+            examples="3, 5, 10, 15, 20, ..."
+        )
+
+        key: str = Field(
+            ...,
+            description="The key of each data element to inject moving average into",
+            examples="y, y1, y2, x1, s1, s2, ..."
+        )
+
+    def __post_init__(self):
+        super().__post_init__()
+
+    def process(self, data: List[Dict]):
+        for datum in data:
+            datum[self.parsed_args.key] = datum[self.parsed_args.key] + self.parsed_args.adder
+
+        return data
+
+
+@dataclass
 class AddInt(Instruction):
     """
     For every item in the list of data, add a specified integer value

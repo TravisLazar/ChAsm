@@ -3,6 +3,7 @@ from typing import List, Dict
 from dataclasses import dataclass, field
 
 
+# TODO: Explore pydantic for this class (for many reasons)
 @dataclass
 class ChartConfig:
     data_xkey: str =                    "x"
@@ -65,6 +66,29 @@ class ChartConfig:
     chart_yaxis_ticklabelstandoff: int = 7
 
     marker_line_width: int =            0
+
+    scatter_mode: str =                 "markers"
+
+    #
+    # Index Specific Configs
+    #   Anything inside of this dictionary will override specific settings for specific keys.
+    #   This allows different series of the chart to have different config options, such as 
+    #   a line chart where one of the series is markers only and one is markers+lines.
+    #
+    #   Example Structure:
+    #       y0: 
+    #           scatter_mode: markers
+    #       y1:
+    #           scatter_mode: markers+lines
+    #  
+    isc: Dict[str, Dict[str, str]] =    field(default_factory=dict)
+
+    def get_config(self, key, setting_name):
+        # Handle ISCs
+        if key in self.isc and setting_name in self.isc[key]:
+            return self.isc[key][setting_name]
+        
+        return getattr(self, setting_name)
 
     def apply_layer(self, obj: Dict) -> None:
         for key, value in obj.items():

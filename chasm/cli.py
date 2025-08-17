@@ -23,7 +23,7 @@ def info():
 
 
 @main.command()
-@click.argument('chart_type', type=click.Choice(['bar', 'stackedbar']))
+@click.argument('chart_type', type=click.Choice(['bar', 'stackedbar', 'scatter', 'line', 'scatter+line']))
 @click.option('--data', '-d', help='raw data, as a list of dicts')
 @click.option('--layer', '-l', multiple=True, help='list of paths to layer files, processed in order')
 @click.option('--mod', '-m', multiple=True, help='list of paths to manipulator files, processed in order')
@@ -35,6 +35,7 @@ def make(chart_type: str, data: str, layer: List[str], mod: List[str], output_pa
 @main.command()
 @click.option('--data', '-d', help='raw data, as a list of dicts')
 @click.option('--mod', '-m', multiple=True, help='list of paths to manipulator files, processed in order')
+@click.option('--output', '-o', help='output file to path')
 def data(data: str, mod: List[str]):
     click.echo(f"Data: {data}")
     click.echo(f"Mods: {mod}")

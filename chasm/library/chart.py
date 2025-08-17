@@ -12,11 +12,24 @@ def make_chart(chart_type: str, raw_data: Any, layer_paths: List[str], mod_paths
     data = parse_data_input(raw_data, mod_paths)
     config = get_chart_config(data=data, layers=layer_paths)
 
-    if chart_type == "stackedbar":
-        config.chart_layout_barmode = "stack"
-
+    # Bar Type Chart
     if chart_type in ("bar", "stackedbar"):
+        if chart_type == "stackedbar":
+            config.chart_layout_barmode = "stack"
+            
         return make_bar(data, config, output_path)
+    
+    # Scatter Type Charts
+    if chart_type in ("scatter", "scatter+line", "line"):
+        config.scatter_mode = "markers"
+
+        if chart_type == "line":
+            config.scatter_mode = "lines"
+
+        elif chart_type == "scatter+line":
+            config.scatter_mode = "lines+markers"
+
+        return make_scatter(data, config, output_path)
 
 
 def make_figure(config: ChartConfig) -> go.Figure:
@@ -67,6 +80,32 @@ def make_figure(config: ChartConfig) -> go.Figure:
         gridcolor=config.chart_yaxis_gridcolor,
         ticklabelstandoff=config.chart_yaxis_ticklabelstandoff
     )
+
+    return fig
+
+
+def make_scatter(data: List[dict], config: ChartConfig, output_path: str) -> go.Figure:
+    fig = make_figure(config)
+
+    for idx, y_key in enumerate(config.data_ykeys):
+        x_key = config.data_xkey
+
+        x_data = [d[x_key] for d in data]
+        y_data = [d[y_key] for d in data]
+
+        if y_key in config.data_ykeys:
+            trace = go.Scatter(
+                x=x_data, 
+                y=y_data,
+                marker_line_width=config.marker_line_width,
+                mode=config.get_config(y_key, "scatter_mode"),
+                name=config.data_ykey_name_lookup.get(y_key, f"Series {y_key}")
+            )
+
+            fig.add_trace(trace, secondary_y=False)
+
+    # TODO: Move out of this function
+    fig.write_image(f"{output_path}")
 
     return fig
 
