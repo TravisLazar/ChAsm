@@ -143,3 +143,18 @@
 ## Example 3
 ![chart](./e3/chart.svg)
 
+## Example 4
+![chart](./e4/chart.svg)
+
+## Example 4
+![chart](./e4/chart.svg)
+
+## Example 4
+![chart](./e4/chart.svg)
+
+## Example 4
+![chart](./e4/chart.svg)
+
+## Example 4
+![chart](./e4/chart.svg)
+

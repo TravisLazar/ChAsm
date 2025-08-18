@@ -118,9 +118,10 @@ def make_scatter(data: List[dict], config: ChartConfig, output_path: str) -> go.
 def make_bar(data: List[dict], config: ChartConfig, output_path: str) -> go.Figure:
     fig = make_figure(config)
 
-    for idx, y_key in enumerate(config.data_ykeys + config.data_skeys):
+    for idx, y_key in enumerate(config.data_ykeys + config.data_skeys + config.data_yskeys):
         x_key = config.data_xkey
 
+        # TODO: This has become very not DRY -- needs a good refactor
         if config.orientation == 'v':
             x_data = [d[x_key] for d in data]
             y_data = [d[y_key] for d in data]
@@ -130,6 +131,17 @@ def make_bar(data: List[dict], config: ChartConfig, output_path: str) -> go.Figu
 
         if y_key in config.data_ykeys:
             trace = go.Bar(
+                x=x_data, 
+                y=y_data,
+                marker_line_width=config.marker_line_width,
+                orientation=config.orientation,
+                name=config.data_ykey_name_lookup.get(y_key, f"Series {y_key}")
+            )
+
+            fig.add_trace(trace, secondary_y=False)
+
+        elif y_key in config.data_yskeys:
+            trace = go.Scatter(
                 x=x_data, 
                 y=y_data,
                 marker_line_width=config.marker_line_width,

@@ -24,15 +24,22 @@ class InjectMovingAverage(Instruction):
     For every item in the list of data, add a specified integer value
     """
     class InstructionArguments(BaseModel):
-        num: int = Field(
+        wsize: int = Field(
             ...,
-            description="The number of data elements to calculate the moving average of.",
-            examples="3, 5, 10, 15, 20, ..."
+            description="The window size of the moving average to compute.",
+            examples="3, 5, 10, 15, 20, ...",
+            gt=0
         )
 
-        key: str = Field(
+        skey: str = Field(
             ...,
-            description="The key of each data element to inject moving average into",
+            description="The source key of each data element to compute moving average from",
+            examples="y, y1, y2, x1, s1, s2, ..."
+        )
+
+        tkey: str = Field(
+            ...,
+            description="The target key of each data element to inject moving average into",
             examples="y, y1, y2, x1, s1, s2, ..."
         )
 
@@ -40,8 +47,18 @@ class InjectMovingAverage(Instruction):
         super().__post_init__()
 
     def process(self, data: List[Dict]):
+        if self.parsed_args.wsize > len(data):
+            raise ValueError(f"Window Size {self.parsed_args.wsize} of InjectMovingAverage cannot be larger than the length of the data ({len(data)}).")
+
+        values = []
+
         for datum in data:
-            datum[self.parsed_args.key] = datum[self.parsed_args.key] + self.parsed_args.adder
+            values.append(datum[self.parsed_args.skey])
+
+            if len(values) > self.parsed_args.wsize:
+                values.pop(0)
+
+            datum[self.parsed_args.tkey] = sum(values) / len(values)
 
         return data
 
@@ -168,6 +185,7 @@ class InjectRandInt(Instruction):
 ISA = {
     "appendrandint":        AppendRandInt,
     "injectrandint":        InjectRandInt,
+    "injectmovingaverage":  InjectMovingAverage,
     "addint":               AddInt,
 }
 
