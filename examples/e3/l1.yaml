@@ -25,6 +25,10 @@ chart_colorway:
 isc:
   y1:
     scatter_mode: markers+lines
+  y2:
+    scatter_mode: lines
+  y3:
+    scatter_mode: markers
 
 
 
