@@ -90,16 +90,23 @@ def make_scatter(data: List[dict], config: ChartConfig, output_path: str) -> go.
     for idx, y_key in enumerate(config.data_ykeys):
         x_key = config.data_xkey
 
-        x_data = [d[x_key] for d in data]
-        y_data = [d[y_key] for d in data]
+        orientation = config.orientation
+
+        if orientation == 'v':
+            x_data = [d[x_key] for d in data]
+            y_data = [d[y_key] for d in data]
+        elif orientation == 'h':
+            y_data = [d[x_key] for d in data]
+            x_data = [d[y_key] for d in data]
 
         if y_key in config.data_ykeys:
             trace = go.Scatter(
                 x=x_data, 
-                y=y_data,
-                marker_line_width=config.marker_line_width,
-                mode=config.get_config(y_key, "scatter_mode"),
-                name=config.data_ykey_name_lookup.get(y_key, f"Series {y_key}")
+                y=y_data, 
+                marker_line_width=config.marker_line_width, 
+                mode=config.get_config(y_key, "scatter_mode"), 
+                orientation=config.get_config(y_key, "orientation"),
+                name=config.data_ykey_name_lookup.get(y_key, f"Series {y_key}") 
             )
 
             fig.add_trace(trace, secondary_y=False)
@@ -116,14 +123,21 @@ def make_bar(data: List[dict], config: ChartConfig, output_path: str) -> go.Figu
     for idx, y_key in enumerate(config.data_ykeys + config.data_skeys):
         x_key = config.data_xkey
 
-        x_data = [d[x_key] for d in data]
-        y_data = [d[y_key] for d in data]
+        orientation = config.orientation
+
+        if orientation == 'v':
+            x_data = [d[x_key] for d in data]
+            y_data = [d[y_key] for d in data]
+        elif orientation == 'h':
+            y_data = [d[x_key] for d in data]
+            x_data = [d[y_key] for d in data]
 
         if y_key in config.data_ykeys:
             trace = go.Bar(
                 x=x_data, 
                 y=y_data,
                 marker_line_width=config.marker_line_width,
+                orientation=orientation,
                 name=config.data_ykey_name_lookup.get(y_key, f"Series {y_key}")
             )
 
@@ -134,6 +148,7 @@ def make_bar(data: List[dict], config: ChartConfig, output_path: str) -> go.Figu
                 x=x_data, 
                 y=y_data,
                 marker_line_width=config.marker_line_width,
+                orientation=orientation,
                 name=config.data_ykey_name_lookup.get(y_key, f"Series {y_key}")
             )
 

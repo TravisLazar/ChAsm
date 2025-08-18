@@ -69,6 +69,8 @@ class ChartConfig:
 
     scatter_mode: str =                 "markers"
 
+    orientation: str =                  "v"
+
     #
     # Index Specific Configs
     #   Anything inside of this dictionary will override specific settings for specific keys.
