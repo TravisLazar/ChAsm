@@ -90,12 +90,10 @@ def make_scatter(data: List[dict], config: ChartConfig, output_path: str) -> go.
     for idx, y_key in enumerate(config.data_ykeys):
         x_key = config.data_xkey
 
-        orientation = config.orientation
-
-        if orientation == 'v':
+        if config.orientation == 'v':
             x_data = [d[x_key] for d in data]
             y_data = [d[y_key] for d in data]
-        elif orientation == 'h':
+        elif config.orientation == 'h':
             y_data = [d[x_key] for d in data]
             x_data = [d[y_key] for d in data]
 
@@ -105,7 +103,7 @@ def make_scatter(data: List[dict], config: ChartConfig, output_path: str) -> go.
                 y=y_data, 
                 marker_line_width=config.marker_line_width, 
                 mode=config.get_config(y_key, "scatter_mode"), 
-                orientation=config.get_config(y_key, "orientation"),
+                orientation=config.orientation,
                 name=config.data_ykey_name_lookup.get(y_key, f"Series {y_key}") 
             )
 
@@ -123,12 +121,10 @@ def make_bar(data: List[dict], config: ChartConfig, output_path: str) -> go.Figu
     for idx, y_key in enumerate(config.data_ykeys + config.data_skeys):
         x_key = config.data_xkey
 
-        orientation = config.orientation
-
-        if orientation == 'v':
+        if config.orientation == 'v':
             x_data = [d[x_key] for d in data]
             y_data = [d[y_key] for d in data]
-        elif orientation == 'h':
+        elif config.orientation == 'h':
             y_data = [d[x_key] for d in data]
             x_data = [d[y_key] for d in data]
 
@@ -137,7 +133,7 @@ def make_bar(data: List[dict], config: ChartConfig, output_path: str) -> go.Figu
                 x=x_data, 
                 y=y_data,
                 marker_line_width=config.marker_line_width,
-                orientation=orientation,
+                orientation=config.orientation,
                 name=config.data_ykey_name_lookup.get(y_key, f"Series {y_key}")
             )
 
@@ -148,7 +144,7 @@ def make_bar(data: List[dict], config: ChartConfig, output_path: str) -> go.Figu
                 x=x_data, 
                 y=y_data,
                 marker_line_width=config.marker_line_width,
-                orientation=orientation,
+                orientation=config.orientation,
                 name=config.data_ykey_name_lookup.get(y_key, f"Series {y_key}")
             )
 
